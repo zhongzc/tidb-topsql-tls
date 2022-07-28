@@ -24,25 +24,29 @@ fn main() {
                 .build(),
         )
     };
-    let client = tipb::TopSqlPubSubClient::new(channel);
-    let mut stream = client
-        .subscribe(&tipb::TopSqlSubRequest::default())
-        .expect("can not call subscribe");
 
-    client.spawn(async move {
+    futures::executor::block_on(async move {
+        let client = tipb::TopSqlPubSubClient::new(channel);
+
         loop {
-            let r = stream.next().await;
-            println!("recv {:?}", r);
-            std::thread::sleep(std::time::Duration::from_secs(1));
+            let mut stream = client
+                .subscribe(&tipb::TopSqlSubRequest::default())
+                .expect("can not call subscribe");
+
+            loop {
+                let r = stream.next().await;
+                println!("recv {:?}", &r);
+
+                if r.is_none() {
+                    println!("end of stream, reconnecting");
+                    break;
+                }
+
+                if r.unwrap().is_err() {
+                    println!("get error, reconnecting");
+                    break;
+                }
+            }
         }
     });
-
-    let (tx, rx) = std::sync::mpsc::channel();
-
-    ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))
-        .expect("Error setting Ctrl-C handler");
-
-    println!("Waiting for Ctrl-C...");
-    rx.recv().expect("Could not receive from channel.");
-    println!("Got it! Exiting...");
 }
