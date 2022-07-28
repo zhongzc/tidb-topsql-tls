@@ -671,18 +671,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tipb"
-version = "0.0.1"
-source = "git+https://github.com/pingcap/tipb.git#aec1a265cf566031d1148139e072fc9ddb937f18"
-dependencies = [
- "futures",
- "grpcio",
- "protobuf",
- "protobuf-build",
-]
-
-[[package]]
-name = "tmp"
+name = "tidb-topsql-tls"
 version = "0.1.0"
 dependencies = [
  "ctrlc",
@@ -691,6 +680,17 @@ dependencies = [
  "kvproto",
  "protobuf",
  "tipb",
+]
+
+[[package]]
+name = "tipb"
+version = "0.0.1"
+source = "git+https://github.com/pingcap/tipb.git#aec1a265cf566031d1148139e072fc9ddb937f18"
+dependencies = [
+ "futures",
+ "grpcio",
+ "protobuf",
+ "protobuf-build",
 ]
 
 [[package]]
