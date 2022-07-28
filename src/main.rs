@@ -36,4 +36,13 @@ fn main() {
             std::thread::sleep(std::time::Duration::from_secs(1));
         }
     });
+
+    let (tx, rx) = std::sync::mpsc::channel();
+
+    ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))
+        .expect("Error setting Ctrl-C handler");
+
+    println!("Waiting for Ctrl-C...");
+    rx.recv().expect("Could not receive from channel.");
+    println!("Got it! Exiting...");
 }

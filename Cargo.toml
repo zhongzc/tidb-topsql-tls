@@ -15,6 +15,7 @@ tipb = { git = "https://github.com/pingcap/tipb.git" }
 grpcio = { version = "0.10", default-features = false, features = ["openssl-vendored", "protobuf-codec"] }
 protobuf = { version = "2.8", features = ["bytes"] }
 futures-util = "*"
+ctrlc = { version = "3.0", features = ["termination"] }
 
 [patch.crates-io]
 raft-proto = { git = "https://github.com/tikv/raft-rs", branch = "master" }
