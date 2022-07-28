@@ -1,13 +1,11 @@
 use futures_util::StreamExt;
 
 fn main() {
-    let ca_path = std::env::var("CA_PATH").expect("please set ca path via `CA_PATH=/path/to/ca`");
-    let crt_path =
-        std::env::var("CRT_PATH").expect("please set ca path via `CRT_PATH=/path/to/crt`");
-    let key_path =
-        std::env::var("KEY_PATH").expect("please set ca path via `KEY_PATH=/path/to/key`");
+    let ca_path = std::env::var("CA").expect("please set ca path via `CA=/path/to/ca`");
+    let crt_path = std::env::var("CRT").expect("please set ca path via `CRT=/path/to/crt`");
+    let key_path = std::env::var("KEY").expect("please set ca path via `KEY=/path/to/key`");
     let tidb_addr =
-        std::env::var("TIDB_ADDR").expect("please set TIDB_ADDR via `TIDB_ADDR=localhost:10080`");
+        std::env::var("ADDR").expect("please set tidb address via `ADDR=localhost:10080`");
 
     let ca = std::fs::read(ca_path).expect("can not read ca path");
     let crt = std::fs::read(crt_path).expect("can not read crt path");
@@ -44,6 +42,7 @@ fn main() {
 
                 if r.unwrap().is_err() {
                     println!("get error, reconnecting");
+                    std::thread::sleep(std::time::Duration::from_secs(2));
                     break;
                 }
             }
