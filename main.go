@@ -42,14 +42,14 @@ func main() {
 		log.Panic("INSTANCE must be tidb or tikv")
 	}
 
-	caCert, err := ioutil.ReadFile("ca.crt")
+	caCert, err := ioutil.ReadFile(caPath)
 	if err != nil {
 		log.Panic(err)
 	}
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
 
-	cert, err := tls.LoadX509KeyPair("client.crt", "client.key")
+	cert, err := tls.LoadX509KeyPair(crtPath, keyPath)
 	if err != nil {
 		log.Panic(err)
 	}
